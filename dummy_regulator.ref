@@ -9,7 +9,7 @@ $ENTRY Go
 Randomizer2 { e.1 = <Randomizer2 e.1>;}
   
 Randomizer {
-    , <Mod <Random 4> 1> :
+    , <Mod <Random 1> 1> :
      { 0 = 'non-regular';
        1 = 'regular';
        2 = <Randomizer2>;

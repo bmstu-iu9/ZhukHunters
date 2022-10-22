@@ -6,6 +6,7 @@ for (( count=1; count<=87; count++ ))
     echo Test "$count"
     ./test_gen 
     timeout 30 ./dummy_regulator
+    ./test_check_log
     rm -f test.CFG
     ./test_count
     rm -f result 

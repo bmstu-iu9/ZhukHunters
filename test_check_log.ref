@@ -1,0 +1,84 @@
+$ENTRY Go
+  { 
+	= <TestCheck (<GetResult>)<GetWitness>>;
+  }
+  
+GetResult {
+  = <Reform <GetResultFile>>;
+}
+
+GetResultFile {
+ , <ExistFile 'result'> :
+ { True = <Open 'r' 1 'result'> <Get 1> <Close 1>;
+   False = 'Timeout';
+ };
+}
+
+Reform {
+ e.1'on - re'e.2 = 'False';
+ e.1'nonre'e.2 = 'False';
+ e.1'NONRE'e.2 = 'False';
+ e.1'on-reg'e.2 = 'False';
+ e.1'ON-R'e.2 = 'False';
+ e.1'REG'e.2 = 'True';
+ e.1'regular'e.2 = 'True';
+ e.1'gul'e.2 = 'True';
+ e.1'yntax'e.2 = 'Syntax_error';
+ e.1'SYNTAX'e.2 = 'Syntax_error';
+ e.1'nknow'e.2 = 'Unknown';
+ e.1'UNKN'e.2 = 'Unknown';
+ e.Z = 'Timeout';
+}
+
+Split {
+ 'Test'e.Number' 'e.Witness' 'e.Points 
+ , <Trim e.Witness> : s.F e.FF = (e.Number)<Dummy1 s.F e.FF>;
+}
+
+Trim {
+ ' 'e.1 = <Trim e.1>;
+ e.1 ' ' = <Trim e.1>;
+ e.1 = e.1;
+}
+
+NotBlank {
+ ' ' = False;
+ s.X = True;
+}
+
+GetWitness {
+ = <Open 'r' 2 'witness.txt'><Split <Get 2>><Close 2>;
+}
+
+DecodeP {
+ 'ERROR' = 2;
+ 'HALF' = 2;
+ 'ONE' = 4;
+ 'TWO' = 8;
+ 'THREE' = 12;
+}
+
+Dummy1 {
+   e.1'SYNTAX'e.2 = 'Syntax_error';
+   e.x
+   , e.x : e.x1 s.1 e.z1 s.2 e.x2
+   , s.1 e.z1 s.2 s.1 e.z1 s.2 : e.z22 s.3 s.4 s.1 e.z1 s.2 e.z23
+   , s.1 e.z1 s.2 : e.z22 s.3 s.4 s.5 e.z24
+     = 'False';
+   e.x, e.x : e.x4 e.x3 e.x1 s.x1 e.x4 e.x2 s.x1 e.x3 = 'True';
+   e.x = 'Monster';
+}
+
+
+
+TestCheck {
+   ('Syntax'e.1)(e.Num)'Syntax'e.2 = <Prout' Syntax error is processed correctly.'>;
+   ('Syntax'e.1)(e.Num)e.2 = <Prout' Syntax ok, error is declared.'>;
+   (e.1)(e.Num)'Syntax'e.2 = <Prout' Syntax error is not found.'>;
+   ('Unknown')(e.Num)e.2 = <Prout' Test is skipped.'>;
+   ('Timeout')(e.Num)e.2 = <Prout' Test is time out.'>;
+   (e.1)(e.Num)'Monster' = <Prout' Monster is faced.'>;
+   ('True')(e.Num)'True' = <Prout' Test is passed - regular.'>;
+   ('False')(e.Num)'False' = <Prout' Test is passed - non-regular.'>;
+   (e.1)(e.Num)e.2 = <Prout 'Want: ' e.2', Has: 'e.1'.'>;
+}

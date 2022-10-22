@@ -20,6 +20,7 @@ RUN rlc dummy_regulator.ref
 RUN rlc test_count.ref
 RUN rlc test_gen.ref
 RUN rlc total_count.ref
+RUN rlc test_check_log.ref
 
 RUN dos2unix run_test.sh
 RUN chmod +x run_test.sh
