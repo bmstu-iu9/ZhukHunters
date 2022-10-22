@@ -1,0 +1,18 @@
+$ENTRY Go
+  { 
+	= <Open 'r' 1 'test.CFG'>
+	  <Open 'w' 2 'result'>
+	  <Putout 2 <Randomizer>>
+	  <Close 1><Close 2>;
+  }
+
+Randomizer2 { e.1 = <Randomizer2 e.1>;}
+  
+Randomizer {
+    , <Mod <Random 4> 1> :
+     { 0 = 'non-regular';
+       1 = 'regular';
+       2 = <Randomizer2>;
+       3 = 'regular';
+     };
+}

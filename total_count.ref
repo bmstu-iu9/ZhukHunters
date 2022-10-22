@@ -1,0 +1,16 @@
+$ENTRY Go
+  { 
+	= <CountResults>;
+  }
+
+CountResults
+ {
+  = <Open 'r' 1 'total_points.txt'><Prout 'Total '<Div <Sub <Numb <Get 1>> 1000> 4>' points earned.'><Close 1>
+    <Open 'r' 1 'monsters'><Prout 'Total '<CountMonsters 0 <Get 1>>' monsters faced.'><Close 1>;
+}
+
+CountMonsters {
+  s.Num e.x'MON'e.x2 0 = <Add s.Num 1>;
+  s.Num e.x'MON'e.x2 = <CountMonsters <Add s.Num 1> <Get 1>>;
+  s.Num e.Z = s.Num;
+}

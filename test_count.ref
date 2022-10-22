@@ -1,0 +1,145 @@
+$ENTRY Go
+  { 
+	= <Open 'a' 4 'monsters'><TestCheck First (<Openpass>)(<GetResult>)<GetWitness>><Close 3><Close 4>;
+  }
+  
+Openpass {
+ , <ExistFile 'total_points.txt'> :
+ {True
+  , <Open 'r' 3 'total_points.txt'> : e.xx = <Numb <Get 3>><Close 3>;
+  False = 1000;
+  };
+}
+
+GetResult {
+  = <Open 'w' 3 'total_points.txt'><Reform <GetResultFile>>;
+}
+
+GetResultFile {
+ , <ExistFile 'result'> :
+ { True = <Open 'r' 1 'result'> <Get 1> <Close 1>;
+   False = 'Timeout';
+ };
+}
+
+Reform {
+ e.1'on - re'e.2 = 'False';
+ e.1'nonre'e.2 = 'False';
+ e.1'NONRE'e.2 = 'False';
+ e.1'on-reg'e.2 = 'False';
+ e.1'ON-R'e.2 = 'False';
+ e.1'REG'e.2 = 'True';
+ e.1'regular'e.2 = 'True';
+ e.1'gul'e.2 = 'True';
+ e.1'yntax'e.2 = 'Syntax_error';
+ e.1'SYNTAX'e.2 = 'Syntax_error';
+ e.1'nknow'e.2 = 'Unknown';
+ e.1'UNKN'e.2 = 'Unknown';
+ e.Z = 'Timeout';
+}
+
+Split {
+ 'Test'e.Number' 'e.Witness' 'e.Points 
+ , <Trim e.Witness> : s.F e.FF = (e.Number)(<DecodeP e.Points>)<Dummy4 (<Dummy1 s.F e.FF>)(<Dummy2 s.F e.FF>)(<Dummy3 s.F e.FF>)>;
+}
+
+Trim {
+ ' 'e.1 = <Trim e.1>;
+ e.1 ' ' = <Trim e.1>;
+ e.1 = e.1;
+}
+
+NotBlank {
+ ' ' = False;
+ s.X = True;
+}
+
+GetWitness {
+ = <Open 'r' 2 'witness.txt'><Split <Get 2>><Close 2>;
+}
+
+DecodeP {
+ 'ERROR' = 2;
+ 'HALF' = 2;
+ 'ONE' = 4;
+ 'TWO' = 8;
+ 'THREE' = 12;
+}
+
+Dummy1 {
+   e.1'SYNTAX'e.2 = 'Syntax_error';
+   e.x
+   , e.x : e.x1 s.1 e.z1 s.2 e.x2
+   , s.1 e.z1 s.2 s.1 e.z1 s.2 : e.z22 s.3 s.4 s.1 e.z1 s.2 e.z23
+   , s.1 e.z1 s.2 : e.z22 s.3 s.4 s.5 e.z24
+     = 'False';
+   e.x, e.x : e.x4 e.x3 e.x1 s.x1 e.x4 e.x2 s.x1 e.x3 = 'True';
+   e.x = 'Monster';
+}
+
+Dummy4 {
+ e.1 (e.x) e.2 (e.x) e.3 = e.x;
+ e.z = 'False';
+}
+
+Predicate1 {
+  e.w s.1 e.x
+  , <Divisor (e.w) s.1 e.x> : True = True;
+  e.x = False;
+}
+
+Predicate2 {
+  e.w s.1 e.x
+  , e.w s.1 e.x : s.1 e.x e.w = True;
+  e.x = False;
+}
+
+Divisor {
+ ()e.w = False;
+ (e.w) e.w = True;
+ (e.w) e.w e.x = <Divisor (e.w)e.x>;
+ (e.w) e.x = False;
+}
+
+Dummy2 {
+   e.1'SYNTAX'e.2 = 'Syntax_error';
+   e.x
+   , e.x : e.x1 s.1 e.z1 s.2 e.x2
+   , <Predicate1 s.1 e.z1 s.2> : True
+   , s.1 e.z1 s.2 : e.z22 s.3 s.4 s.5 e.z24
+     = 'False';
+   e.x, e.x : e.x4 e.x3 e.x1 s.x1 e.x4 e.x2 s.x1 e.x3 = 'True';
+   e.x = 'Monster';
+}
+
+Dummy3 {
+   e.1'SYNTAX'e.2 = 'Syntax_error';
+   e.x
+   , e.x : e.x1 s.1 e.z1 s.2 e.x2
+   , <Predicate2 s.1 e.z1 s.2> : True
+   , s.1 e.z1 s.2 : e.z22 s.3 s.4 s.5 e.z24
+     = 'False';
+   e.x, e.x : e.x4 e.x3 e.x1 s.x1 e.x4 e.x2 s.x1 e.x3 = 'True';
+   e.x = 'Monster';
+}
+
+TestCheck {
+   s.Corr (s.Current)('Syntax'e.1)(e.Num)(s.Points)'Syntax'e.2 = <Putout 3 <Add s.Current s.Points>>;
+   s.Corr (s.Current)('Syntax'e.1)(e.Num)(s.Points)e.2 = <Putout 3 s.Current>;
+   s.Corr (s.Current)(e.1)(e.Num)(s.Points)'Syntax'e.2 = <Putout 3 s.Current>;
+   s.Corr (s.Current)('Unknown'e.1)(e.Num)(s.Points)e.2 = <Putout 3 s.Current>;
+   s.Corr (s.Current)('Timeout')(e.Num)e.2 = <Putout 3 s.Current>;
+   s.Corr (s.Current)(e.1)(e.Num)(s.Points)'Monster' = <Putout 4 e.Num' MONSTER'><Putout 3 <Sub s.Current 20>>;
+   s.Corr (s.Current)(e.1)(e.Num)(s.Points) e.1 = <Putout 3 <Add s.Current s.Points>>;
+   Second (s.Current)(e.1)(e.Num)e.2 = <Putout 3 s.Current>;
+   s.Corr (s.Current)('True')(e.Num)(s.Points)e.2 = <Putout 3 <Sub s.Current <Minimum <Div s.Points 2> 3>>>;
+   s.Corr (s.Current)('False')(e.Num)(s.Points)e.2 = <Putout 3 <Sub s.Current <Minimum <Div s.Points 2> 4>>>;
+}
+
+Minimum {
+  s.1 s.2
+  , <Compare s.1 s.2> :
+   { '+' = s.2;
+     s.z = s.1;
+   };
+}
